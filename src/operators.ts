@@ -1,9 +1,9 @@
 import {Observable, of, pipe, UnaryFunction} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 /**
- * Operator to map firebase.default.User to firebase.default.UserInfo.
+ * Operator to map firebase.User to firebase.UserInfo.
  *
  * Sample of use:
  *
@@ -18,9 +18,9 @@ import * as firebase from 'firebase/app';
  * )
  * ```
  */
-export const mapUserToUserInfo = (): UnaryFunction<Observable<firebase.default.User>, Observable<firebase.default.UserInfo>> =>
+export const mapUserToUserInfo = (): UnaryFunction<Observable<firebase.User>, Observable<firebase.UserInfo>> =>
 	pipe(
-		switchMap((user: firebase.default.User) => {
+		switchMap((user: firebase.User) => {
 			if (user) {
 				const {uid, providerId, displayName, photoURL, phoneNumber, email} = user;
 				return of({uid, providerId, displayName, photoURL, phoneNumber, email});
@@ -31,7 +31,7 @@ export const mapUserToUserInfo = (): UnaryFunction<Observable<firebase.default.U
 	);
 
 /**
- * Operator to map firebase.default.auth.UserCredential to firebase.default.UserInfo.
+ * Operator to map firebase.auth.UserCredential to firebase.UserInfo.
  *
  * For use with alternative facade only.
  *
@@ -48,9 +48,9 @@ export const mapUserToUserInfo = (): UnaryFunction<Observable<firebase.default.U
  * )
  * ```
  */
-export const mapUserCredentialToUserInfo = (): UnaryFunction<Observable<{userCredential: firebase.default.auth.UserCredential}>, Observable<firebase.default.UserInfo>> =>
+export const mapUserCredentialToUserInfo = (): UnaryFunction<Observable<{userCredential: firebase.auth.UserCredential}>, Observable<firebase.UserInfo>> =>
 	pipe(
-		switchMap(({userCredential}: {userCredential: firebase.default.auth.UserCredential}) => {
+		switchMap(({userCredential}: {userCredential: firebase.auth.UserCredential}) => {
 			if (!!userCredential) {
 				const {uid, providerId, displayName, photoURL, phoneNumber, email} = userCredential.user;
 				return of({uid, providerId, displayName, photoURL, phoneNumber, email});
