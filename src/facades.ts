@@ -23,11 +23,11 @@ if (Capacitor.platform === 'web') {
  * @param providerId The provider identification.
  * @param data The provider additional information (optional).
  */
-export const cfaSignIn = (providerId: string, data?: SignInOptions): Observable<firebase.User> => {
-	const googleProvider = new firebase.auth.GoogleAuthProvider().providerId;
-	const facebookProvider = new firebase.auth.FacebookAuthProvider().providerId;
-	const twitterProvider = new firebase.auth.TwitterAuthProvider().providerId;
-	const phoneProvider = new firebase.auth.PhoneAuthProvider().providerId;
+export const cfaSignIn = (providerId: string, data?: SignInOptions): Observable<firebase.default.User> => {
+	const googleProvider = new firebase.default.auth.GoogleAuthProvider().providerId;
+	const facebookProvider = new firebase.default.auth.FacebookAuthProvider().providerId;
+	const twitterProvider = new firebase.default.auth.TwitterAuthProvider().providerId;
+	const phoneProvider = new firebase.default.auth.PhoneAuthProvider().providerId;
 	switch (providerId) {
 		case googleProvider:
 			return cfaSignInGoogle();
@@ -45,19 +45,19 @@ export const cfaSignIn = (providerId: string, data?: SignInOptions): Observable<
 /**
  * Call the Google sign in method on native layer and sign in on web layer with retrieved credentials.
  */
-export const cfaSignInGoogle = (): Observable<firebase.User> => {
+export const cfaSignInGoogle = (): Observable<firebase.default.User> => {
 	return new Observable(observer => {
 		// get the provider id
-		const providerId = firebase.auth.GoogleAuthProvider.PROVIDER_ID;
+		const providerId = firebase.default.auth.GoogleAuthProvider.PROVIDER_ID;
 
 		// native sign in
 		plugin.signIn({providerId}).then((result: GoogleSignInResult) => {
 			// create the credentials
-			const credential = firebase.auth.GoogleAuthProvider.credential(result.idToken);
+			const credential = firebase.default.auth.GoogleAuthProvider.credential(result.idToken);
 
 			// web sign in
-			firebase.app().auth().signInWithCredential(credential)
-				.then((userCredential: firebase.auth.UserCredential) => {
+			firebase.default.app().auth().signInWithCredential(credential)
+				.then((userCredential: firebase.default.auth.UserCredential) => {
 					observer.next(userCredential.user);
 					observer.complete();
 				})
@@ -73,19 +73,19 @@ export const cfaSignInGoogle = (): Observable<firebase.User> => {
 /**
  * Call the Twitter sign in method on native and sign in on web layer with retrieved credentials.
  */
-export const cfaSignInTwitter = (): Observable<firebase.User> => {
+export const cfaSignInTwitter = (): Observable<firebase.default.User> => {
 	return new Observable(observer => {
 		// get the provider id
-		const providerId = firebase.auth.TwitterAuthProvider.PROVIDER_ID;
+		const providerId = firebase.default.auth.TwitterAuthProvider.PROVIDER_ID;
 
 		// native sign in
 		plugin.signIn({providerId}).then((result :TwitterSignInResult) => {
 			// create the credentials
-			const credential = firebase.auth.TwitterAuthProvider.credential(result.idToken, result.secret);
+			const credential = firebase.default.auth.TwitterAuthProvider.credential(result.idToken, result.secret);
 
 			// web sign in
-			firebase.app().auth().signInWithCredential(credential)
-				.then((userCredential: firebase.auth.UserCredential) => {
+			firebase.default.app().auth().signInWithCredential(credential)
+				.then((userCredential: firebase.default.auth.UserCredential) => {
 					observer.next(userCredential.user);
 					observer.complete();
 				})
@@ -98,19 +98,19 @@ export const cfaSignInTwitter = (): Observable<firebase.User> => {
 /**
  * Call the Facebook sign in method on native and sign in on web layer with retrieved credentials.
  */
-export const cfaSignInFacebook = (): Observable<firebase.User> => {
+export const cfaSignInFacebook = (): Observable<firebase.default.User> => {
 	return new Observable(observer => {
 		// get the provider id
-		const providerId = firebase.auth.FacebookAuthProvider.PROVIDER_ID;
+		const providerId = firebase.default.auth.FacebookAuthProvider.PROVIDER_ID;
 
 		// native sign in
 		plugin.signIn({providerId}).then((result: FacebookSignInResult) => {
 			// create the credentials
-			const credential = firebase.auth.FacebookAuthProvider.credential(result.idToken);
+			const credential = firebase.default.auth.FacebookAuthProvider.credential(result.idToken);
 
 			// web sign in
-			firebase.app().auth().signInWithCredential(credential)
-				.then((userCredential: firebase.auth.UserCredential) => {
+			firebase.default.app().auth().signInWithCredential(credential)
+				.then((userCredential: firebase.default.auth.UserCredential) => {
 					observer.next(userCredential.user);
 					observer.complete();
 				})
@@ -125,10 +125,10 @@ export const cfaSignInFacebook = (): Observable<firebase.User> => {
  * @param phone The user phone number.
  * @param verificationCode The verification code sent by SMS (optional).
  */
-export const cfaSignInPhone = (phone: string, verificationCode?: string) : Observable<firebase.User>  => {
+export const cfaSignInPhone = (phone: string, verificationCode?: string) : Observable<firebase.default.User>  => {
 	return new Observable(observer => {
 		// get the provider id
-		const providerId = firebase.auth.PhoneAuthProvider.PROVIDER_ID;
+		const providerId = firebase.default.auth.PhoneAuthProvider.PROVIDER_ID;
 
 		plugin.signIn({providerId, data:{phone, verificationCode}}).then((result: PhoneSignInResult) => {
 			// if there is no verification code
@@ -137,11 +137,11 @@ export const cfaSignInPhone = (phone: string, verificationCode?: string) : Obser
 			}
 
 			// create the credentials
-			const credential = firebase.auth.PhoneAuthProvider.credential(result.verificationId, result.verificationCode);
+			const credential = firebase.default.auth.PhoneAuthProvider.credential(result.verificationId, result.verificationCode);
 
 			// web sign in
-			firebase.app().auth().signInWithCredential(credential)
-				.then((userCredential: firebase.auth.UserCredential) => {
+			firebase.default.app().auth().signInWithCredential(credential)
+				.then((userCredential: firebase.default.auth.UserCredential) => {
 					observer.next(userCredential.user);
 					observer.complete();
 				})
@@ -185,7 +185,7 @@ export const cfaSignOut = (): Observable<void> => {
 	return new Observable(observer => {
 		plugin.signOut({}).then(() => {
 			// web sign out
-			firebase.app().auth().signOut()
+			firebase.default.app().auth().signOut()
 				.then(() => {
 					observer.next();
 					observer.complete();

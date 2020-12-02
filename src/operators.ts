@@ -1,10 +1,9 @@
-import {User, UserInfo} from 'firebase/app';
 import {Observable, of, pipe, UnaryFunction} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 import * as firebase from 'firebase/app';
 
 /**
- * Operator to map firebase.User to firebase.UserInfo.
+ * Operator to map firebase.default.User to firebase.default.UserInfo.
  *
  * Sample of use:
  *
@@ -19,9 +18,9 @@ import * as firebase from 'firebase/app';
  * )
  * ```
  */
-export const mapUserToUserInfo = (): UnaryFunction<Observable<User>, Observable<UserInfo>> =>
+export const mapUserToUserInfo = (): UnaryFunction<Observable<firebase.default.User>, Observable<firebase.default.UserInfo>> =>
 	pipe(
-		switchMap((user: User) => {
+		switchMap((user: firebase.default.User) => {
 			if (user) {
 				const {uid, providerId, displayName, photoURL, phoneNumber, email} = user;
 				return of({uid, providerId, displayName, photoURL, phoneNumber, email});
@@ -32,7 +31,7 @@ export const mapUserToUserInfo = (): UnaryFunction<Observable<User>, Observable<
 	);
 
 /**
- * Operator to map firebase.auth.UserCredential to firebase.UserInfo.
+ * Operator to map firebase.default.auth.UserCredential to firebase.default.UserInfo.
  *
  * For use with alternative facade only.
  *
@@ -49,9 +48,9 @@ export const mapUserToUserInfo = (): UnaryFunction<Observable<User>, Observable<
  * )
  * ```
  */
-export const mapUserCredentialToUserInfo = (): UnaryFunction<Observable<{userCredential: firebase.auth.UserCredential}>, Observable<UserInfo>> =>
+export const mapUserCredentialToUserInfo = (): UnaryFunction<Observable<{userCredential: firebase.default.auth.UserCredential}>, Observable<firebase.default.UserInfo>> =>
 	pipe(
-		switchMap(({userCredential}: {userCredential: firebase.auth.UserCredential}) => {
+		switchMap(({userCredential}: {userCredential: firebase.default.auth.UserCredential}) => {
 			if (!!userCredential) {
 				const {uid, providerId, displayName, photoURL, phoneNumber, email} = userCredential.user;
 				return of({uid, providerId, displayName, photoURL, phoneNumber, email});
